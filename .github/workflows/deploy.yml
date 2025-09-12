@@ -28,7 +28,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
           script: |
-            cd /home/ubuntu/cpen-321-m1-backend
+            cd /home/ubuntu/cpen-321-m1-backend/backend
             
             cat > .env <<EOF
             PORT=${{ secrets.PORT }}
