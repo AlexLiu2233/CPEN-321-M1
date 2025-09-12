@@ -22,22 +22,35 @@ jobs:
           target: "/home/ubuntu/cpen-321-m1-backend"
 
       - name: Rebuild and Redeploy
-        uses: appleboy/ssh-action@v1
-        with:
-          debug: true
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
-          script: |
-            cd /home/ubuntu/cpen-321-m1-backend/backend
-            
-            cat > .env <<EOF
-            PORT=${{ secrets.PORT }}
-            DB_URI=${{ secrets.DB_URI }}
-            EOF
+  uses: appleboy/ssh-action@v1
+  with:
+    debug: true
+    host: ${{ secrets.EC2_HOST }}
+    username: ${{ secrets.EC2_USER }}
+    key: ${{ secrets.EC2_KEY }}
+    script: |
+      set -euxo pipefail
+      cd /home/ubuntu/cpen-321-m1-backend/backend
 
-            chmod 600 .env
+      # Write .env with NO indentation and no quoting of numbers
+      cat > .env <<'EOF'
+PORT=${{ secrets.PORT }}
+DB_URI=${{ secrets.DB_URI }}
+JWT_SECRET=${{ secrets.JWT_SECRET }}
+GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
+EOF
 
-            docker compose down
-            docker compose --env-file .env build
-            docker compose --env-file .env up -d
+      echo "---- .env (showing invisibles) ----"
+      sed -n 'l' .env
+
+      echo "---- Compose version/context ----"
+      docker compose version
+      docker context show || true
+
+      echo "---- Compose config (after interpolation) ----"
+      docker compose --env-file .env config
+
+      # If the above succeeded, proceed
+      docker compose --env-file .env down || true
+      docker compose --env-file .env up -d --build
+
