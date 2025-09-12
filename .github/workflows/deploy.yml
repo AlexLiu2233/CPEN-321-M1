@@ -32,14 +32,12 @@ jobs:
             
             cat > .env <<EOF
             PORT=${{ secrets.PORT }}
-            MONGODB_URI=${{ secrets.MONGODB_URI }}
+            DB_URI=${{ secrets.DB_URI }}
             EOF
 
             chmod 600 .env
 
-            docker-compose down
-            docker-compose --env-file .env build
-            docker-compose --env-file .env up -d
-
-          target: "/home/ubuntu/cpen-321-m1-backend"
+            docker compose down
+            docker compose --env-file .env build
+            docker compose --env-file .env up -d
     
