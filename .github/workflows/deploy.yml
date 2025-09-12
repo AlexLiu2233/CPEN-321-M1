@@ -34,11 +34,11 @@ jobs:
 
       # Write .env with NO indentation and no quoting of numbers
       cat > .env <<'EOF'
-PORT=${{ secrets.PORT }}
-DB_URI=${{ secrets.DB_URI }}
-JWT_SECRET=${{ secrets.JWT_SECRET }}
-GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
-EOF
+      PORT=${{ secrets.PORT }}
+      DB_URI=${{ secrets.DB_URI }}
+      JWT_SECRET=${{ secrets.JWT_SECRET }}
+      GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
+      EOF
 
       echo "---- .env (showing invisibles) ----"
       sed -n 'l' .env
