@@ -28,6 +28,9 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_KEY }}
           script: |
+            set -euo pipefail
+            unset DOCKER_HOST || true  
+
             cd /home/ubuntu/cpen-321-m1-backend/backend
             
             cat > .env <<EOF
