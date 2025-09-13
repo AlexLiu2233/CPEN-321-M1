@@ -17,7 +17,7 @@ services:
     restart: always
     container_name: cpen321_backendM1
     environment:
-      - MONGODB_URI=${{MONGODB_URI}}
+      - MONGODB_URI=${MONGODB_URI}
       - PORT=${PORT:-3000}
       - JWT_SECRET=${JWT_SECRET}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
