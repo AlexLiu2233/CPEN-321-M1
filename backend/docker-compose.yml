@@ -22,7 +22,7 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
     env_file:
-      - .env
+      - ./.env
     ports:
       - '${PORT:-3000}:${PORT:-3000}'
     depends_on:
