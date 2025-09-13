@@ -35,7 +35,7 @@ jobs:
             
             cat > .env <<EOF
             PORT=${{ secrets.PORT }}
-            DB_URI=${{ secrets.DB_URI }}
+            MONGODB_URI=${{ secrets.MONGODB_URI }}
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
             EOF
