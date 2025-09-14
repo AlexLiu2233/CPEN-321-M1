@@ -12,7 +12,9 @@
 
 **Description**:[Upon clicking and confirm "delete account" in Profile, you are signed out but the profile is still there if you try and sign in again]
 
-**How it was fixed?**: [WRITE_ISSUE_SOLUTION]
+**How it was fixed?**: [Added deleteAccount() in ProfileViewModel to call profileRepository.deleteProfile().
+
+Updated ProfileScreen onDeleteDialogConfirm to call deleteAccount(), and only clear auth + navigate after success.]
 
 ### Issue 3: [WHITE SCREEN FREEZE]
 

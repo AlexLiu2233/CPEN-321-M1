@@ -8,4 +8,6 @@ interface ProfileRepository {
     suspend fun updateProfile(name: String, bio: String): Result<User>
     suspend fun updateUserHobbies(hobbies: List<String>): Result<User>
     suspend fun getAvailableHobbies(): Result<List<String>>
+    // Fix BUG 2
+    suspend fun deleteProfile(): Result<Unit>
 }

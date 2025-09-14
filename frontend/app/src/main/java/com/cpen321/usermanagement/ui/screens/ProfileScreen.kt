@@ -96,10 +96,17 @@ fun ProfileScreen(
             onDeleteDialogDismiss = {
                 dialogState = dialogState.copy(showDeleteDialog = false)
             },
+            // in ProfileScreen.kt (inside ProfileScreenCallbacks creation)
             onDeleteDialogConfirm = {
                 dialogState = dialogState.copy(showDeleteDialog = false)
-                authViewModel.handleAccountDeletion()
-                actions.onAccountDeleted()
+                profileViewModel.deleteAccount(
+                    onSuccess = {
+                        // only after server confirms deletion:
+                        authViewModel.handleAccountDeletion()
+                        actions.onAccountDeleted() // navigate & clear back stack
+                    },
+                    onError = { /* optional: no-op; snackbar already driven by uiState.errorMessage */ }
+                )
             },
             onSuccessMessageShown = profileViewModel::clearSuccessMessage,
             onErrorMessageShown = profileViewModel::clearError

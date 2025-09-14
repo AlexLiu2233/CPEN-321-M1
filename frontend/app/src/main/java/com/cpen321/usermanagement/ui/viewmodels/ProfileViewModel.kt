@@ -183,4 +183,29 @@ class ProfileViewModel @Inject constructor(
             }
         }
     }
+
+    // in ProfileViewModel.kt
+    fun deleteAccount(
+        onSuccess: () -> Unit = {},
+        onError: (String) -> Unit = {}
+    ) {
+        viewModelScope.launch {
+            // Reuse your UI state flags/messages pattern
+            _uiState.value = _uiState.value.copy(
+                isLoadingProfile = true,
+                errorMessage = null,
+                successMessage = null
+            )
+            val result = profileRepository.deleteProfile()
+            if (result.isSuccess) {
+                _uiState.value = ProfileUiState(successMessage = "Account deleted.")
+                onSuccess()
+            } else {
+                val msg = result.exceptionOrNull()?.message ?: "Failed to delete account"
+                _uiState.value = _uiState.value.copy(isLoadingProfile = false, errorMessage = msg)
+                onError(msg)
+            }
+        }
+    }
+
 }

@@ -140,4 +140,36 @@ class ProfileRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
+
+    override suspend fun deleteProfile(): Result<Unit> {
+        return try {
+            // Auth header handled by your interceptor; keep the "" param for consistency with your existing calls
+            val response = userInterface.deleteProfile("")
+            if (response.isSuccessful) {
+                // Backend likely returns 204 No Content—this path covers that too
+                // Clean up local auth immediately after successful delete
+                tokenManager.clearToken()
+                RetrofitClient.setAuthToken(null)
+                Result.success(Unit)
+            } else {
+                val errorBodyString = response.errorBody()?.string()
+                val errorMessage = parseErrorMessage(errorBodyString, "Failed to delete account.")
+                Log.e(TAG, "Failed to delete profile: $errorMessage")
+                Result.failure(Exception(errorMessage))
+            }
+        } catch (e: java.net.SocketTimeoutException) {
+            Log.e(TAG, "Network timeout while deleting profile", e)
+            Result.failure(e)
+        } catch (e: java.net.UnknownHostException) {
+            Log.e(TAG, "Network connection failed while deleting profile", e)
+            Result.failure(e)
+        } catch (e: java.io.IOException) {
+            Log.e(TAG, "IO error while deleting profile", e)
+            Result.failure(e)
+        } catch (e: retrofit2.HttpException) {
+            Log.e(TAG, "HTTP error while deleting profile: ${e.code()}", e)
+            Result.failure(e)
+        }
+    }
+
 }
